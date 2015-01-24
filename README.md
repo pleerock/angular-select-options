@@ -13,7 +13,7 @@ Open samples/index.html to see the example how to use this directive.
     * (or add manually into your bower.json dependencies and run bower-install)
     * (or download ZIP from github and extract files in the case if you don't use bower)
     
-2. Include ```html bower_components/angular-select-options/dist/angular-select-options.js``` in your `index.html` file
+2. Include ```bower_components/angular-select-options/dist/angular-select-options.js``` in your `index.html` file
 
 3. Add a new dependency in your module
 ```javascript
@@ -22,6 +22,29 @@ angular.module('yourApp', ['selectOptions', ...])
 
 **How to use it**
 
+```html
+<my-custom-directive ng-model="youCanUseItWithModel" select-options="fruit.name in fruits track by fruit.id"></my-custom-directive>
+```
+
+Then you can get access to your fruits via `selectOptions` controller in your `my-custom-directive` directive this way:
+
+```javascript
+angular.module('myModule').directive('myCustomDirective', function () {
+   return { // scope type can be any - even isolate
+      require: ['ngModel', 'selectOptions'],
+      templateUrl: 'select-items.html',
+      link: function (scope, element, attrs, controllers) {
+      
+          var ngModelCtrl        = controllers[0];
+          var selectOptionsCtrl  = controllers[1];
+         
+         // now you can access selectOptionsCtrl to get the data you need (fruits, fruit names, etc.)
+         
+      }
+   }
+});
+
+```
 
 **TODO-s (for contributors)**:
 
