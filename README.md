@@ -8,7 +8,7 @@ Open samples/index.html to see the example how to use this directive.
 
 **Installation**
 
-1. Run bower install angular-select-options --save
+1. Run `bower install angular-select-options --save`
 
     * (or add manually into your bower.json dependencies and run bower-install)
     * (or download ZIP from github and extract files in the case if you don't use bower)

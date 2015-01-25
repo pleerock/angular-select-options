@@ -30,7 +30,7 @@
      * @ngInject
      */
     function openDropdown($parse) {
-        var regexp = (/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?(?:\s+order\s+by\s+([\s\S]+?))?$/);
+        var regexp = (/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?(?:\s+order\s+by\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?$/);
 
         var replaceItemPrefix = function(replacement, string) {
             if (!string || !replacement) return string;
@@ -57,7 +57,7 @@
 
                 var match = $attrs.selectOptions.match(regexp);
                 if (!match)
-                    throw 'Expected expression in form of "_select_ (as _label_)? for (_key_,)?_value_ in _collection_", but given ' + $attrs.selectOptions;
+                    throw 'Expected expression in form of "_select_ (as _label_)? for (_key_,)?_value_ in _collection_ track by (_key_) order by (_key_) group by (_key_)", but given ' + $attrs.selectOptions;
 
                 this.findItemInModel = function (item, model) {
                     var trackByProperty = this.getTrackBy();
@@ -108,6 +108,14 @@
                     return replacePrefixes(trackBy);
                 };
 
+                this.getGroupBy = function() {
+                    return match[9];
+                };
+
+                this.getGroupByWithoutPrefixes = function() {
+                    return replaceItemPrefix(this.getItem(), this.getGroupBy());
+                };
+
                 /**
                  * @param object
                  * @returns {string}
@@ -117,6 +125,17 @@
                     locals[this.getItem()] = object;
                     var name = $parse(this.getItemName())($scope, locals);
                     return String(name).replace(/<[^>]+>/gm, ''); // strip html from the data here
+                };
+
+                /**
+                 * @param object
+                 * @returns {string}
+                 */
+                this.parseItemGroup = function(object) {
+                    var locals = {};
+                    locals[this.getItem()] = object;
+                    var name = $parse(this.getGroupBy())($scope, locals);
+                    return name ? String(name).replace(/<[^>]+>/gm, '') : name; // strip html from the data here
                 };
 
                 /**
