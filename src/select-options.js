@@ -179,6 +179,14 @@
                 };
 
                 /**
+                 * @param expression
+                 * @returns {*}
+                 */
+                this.applyOnScope = function(expression) {
+                    return $scope.$apply(expression);
+                };
+
+                /**
                  * Logs all parsed data.
                  */
                 this.log = function() {
