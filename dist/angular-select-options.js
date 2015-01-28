@@ -24,12 +24,12 @@
      * @description
      * This directive opens a dropdown on the click on some element.
      */
-    angular.module('selectOptions').directive('selectOptions', openDropdown);
+    angular.module('selectOptions').directive('selectOptions', selectOptions);
 
     /**
      * @ngInject
      */
-    function openDropdown($parse) {
+    function selectOptions($parse) {
         var regexp = (/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?(?:\s+order\s+by\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?$/);
 
         var replaceItemPrefix = function(replacement, string) {
@@ -50,6 +50,7 @@
 
         return {
             restrict: 'A',
+            priority: 1, // we need a higher priority to make sure that select options directive initialize before directives that uses it
             controller: /* @ngInject */function ($scope, $attrs) {
 
                 if (!$attrs.selectOptions)
@@ -72,6 +73,18 @@
                             founded = m;
                     });
                     return founded;
+                };
+
+                /**
+                 * Creates a new item with the given name as a name.
+                 *
+                 * @param {*} name
+                 * @return {*}
+                 */
+                this.createItem = function(name) {
+                    var newItem = {};
+                    newItem[this.getItemNameWithoutPrefixes()] = name;
+                    return this.parseItemValue(newItem);
                 };
 
                 this.getItemNameWithoutPrefixes = function() {
