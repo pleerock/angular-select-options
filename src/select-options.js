@@ -42,6 +42,10 @@
             return string;
         };
 
+        var hasPrefix = function(name) {
+            return name.indexOf('.') !== -1;
+        };
+
         var replacePrefixes = function(string) {
             if (!string) return string;
             var lastDot = string.lastIndexOf('.');
@@ -82,13 +86,20 @@
                  * @return {*}
                  */
                 this.createItem = function(name) {
-                    var newItem = {};
-                    newItem[this.getItemNameWithoutPrefixes()] = name;
+                    var itemProperty = this.getItemNameWithoutPrefixes();
+                    var newItem;
+                    if (itemProperty) {
+                        newItem = {};
+                        newItem[itemProperty] = name;
+                    } else {
+                        newItem = name;
+                    }
                     return this.parseItemValue(newItem);
                 };
 
                 this.getItemNameWithoutPrefixes = function() {
-                    return replacePrefixes(this.getItemName());
+                    var name = this.getItemName();
+                    return hasPrefix(name) ? replacePrefixes(name) : null;
                 };
 
                 this.getItemName = function() {
