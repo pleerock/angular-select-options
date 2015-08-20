@@ -30,7 +30,7 @@
      * @ngInject
      */
     function selectOptions($parse) {
-        var regexp = (/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?(?:\s+order\s+by\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?$/);
+        var regexp = (/^\s*([\s\S]+?)(?:\s+as\s+([\s\S]+?))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+([\s\S]+?)(?:\s+track\s+by\s+([\s\S]+?))?(?:\s+order\s+by\s+([\s\S]+?))?(?:\s+group\s+by\s+([\s\S]+?))?(?:\s+create\s+from\s+([\s\S]+?))?$/);
 
         var replaceItemPrefix = function(replacement, string) {
             if (!string || !replacement) return string;
@@ -89,7 +89,7 @@
                     var itemProperty = this.getItemNameWithoutPrefixes();
                     var newItem;
                     if (itemProperty) {
-                        newItem = {};
+                        newItem = this.createFrom() ? $parse(this.createFrom())($scope) : {};
                         newItem[itemProperty] = name;
                     } else {
                         newItem = name;
@@ -134,6 +134,10 @@
 
                 this.getGroupBy = function() {
                     return match[9];
+                };
+
+                this.createFrom = function() {
+                    return match[10];
                 };
 
                 this.getGroupByWithoutPrefixes = function() {
