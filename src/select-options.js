@@ -176,7 +176,7 @@
                     var locals = {};
                     locals[newItemValue] = object;
                     var name = $parse(newItemName)($scope, locals);
-                    return String(name).replace(/<[^>]+>/gm, ''); // strip html from the data here
+                    return name ? String(name).replace(/<[^>]+>/gm, '') : ''; // strip html from the data here
                 };
 
                 /**

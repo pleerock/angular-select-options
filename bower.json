@@ -1,7 +1,7 @@
 {
   "name": "angular-select-options",
   "description": "A special angular directive that works like angular's ng-options but can be used in along with any element and has several specific abilities",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "keywords": ["select-options", "angular-select-options"],
   "authors": [
     { "name": "Umed Khudoiberdiev", "email": "info@zar.tj" }
